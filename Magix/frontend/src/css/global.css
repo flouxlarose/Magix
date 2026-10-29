@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+.darker {
+    background-color: brown;
+}
+
+.bigger {
+    font-size: 2rem;
+}

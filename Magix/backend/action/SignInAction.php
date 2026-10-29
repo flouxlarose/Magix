@@ -4,7 +4,7 @@
     class SignInAction extends CommonAction {
 
         public function __construct() {
-            parent::__construct(CommonAction::$VISIBILITY_);
+            parent::__construct(CommonAction::$VISIBILITY_PUBLIC);
         }
 
         protected function executeAction() {
@@ -14,14 +14,12 @@
 
             $result = parent::callAPI("signin", $data);
 
-            if ($result == "INVALID_USERNAME_PASSWORD") {
-                // err
-            }
-            else {
+            if ($result != "INVALID_USERNAME_PASSWORD") {
                 // Pour voir les informations retournées : var_dump($result);exit;
-                $key = $result->key;
+                $_SESSION["key"] = $result->key;
+                $result = "OK";
             }
 
-            return [];
+            return compact("result");
         }
     }

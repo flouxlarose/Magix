@@ -1,13 +1,24 @@
+import { useState } from 'react';
+import SiteLayout from '../layouts/site-layout';
+import Button from '../components/button';
+
 export default function Index() {
-  const handleSubmit = evt => {
+	const [ShowSuccessMessage, setShowSuccessMessage] = useState(false);	
+	const [ShowErrorMessage, setShowErrorMessage] = useState(false);
+	const [data, setData] = useState({
+		username : "",
+		password : "",
+	})
+
+	const handleSubmit = evt => {
 		evt.preventDefault();
 
-		// Appeler un API pour ajouter notre vêtement
+		// Appeler un API
 		let formData = new FormData();
-		formData.append("quantite", data.qty);
-		formData.append("nom", data.name);
+		formData.append("username", data.username);
+		formData.append("password", data.password);
 
-		fetch("/api/products-add.php", {
+		fetch("/api/sign-in.php", {
 			method: 'POST',
 			body: formData,
 		})
@@ -16,18 +27,41 @@ export default function Index() {
 			if (result == "OK") {
 				setShowSuccessMessage(true);
 				setData({
-					qty : 1,
-					name : ""
+					username : "",
+					password : "",
 				})				
+			}
+			else if (result == "INVALID_USERNAME_PASSWORD"){
+				setShowErrorMessage(true);
+				setData({
+					username : "",
+					password : "",
+				})	
 			}
 		})
 	}
 
   	return  <SiteLayout title="Sign in">
         		<h1>Connectez-vous</h1>
+				{
+					ShowSuccessMessage ?
+					<div className='bg-green-300 text-green-700 p-1 border my-2'> 
+						Vous êtes connecté !
+					</div>
+					:
+						null
+				}
+				{
+					ShowErrorMessage ?
+					<div className='bg-red-300 text-green-700 p-1 border my-2'> 
+						Erreur de connection
+					</div>
+					:
+						null
+				}
 				<form onSubmit={handleSubmit} className='bg-white border p-1 rounded'>
 					<div>
-						Username : 
+						Username :
 						<input 
 							type="text" 
 							name="username" 
@@ -37,17 +71,17 @@ export default function Index() {
 							/>
 					</div>
 					<div className='mt-1'>
-						Password : 
+						Password :
 						<input 
 							type="password" 
 							name="password" 
 							value={data.password} 
 							required={true}
-							onChange={evt => { setData({...data, name : evt.target.value}) }}
+							onChange={evt => { setData({...data, password : evt.target.value}) }}
 							/>
 					</div>
 					<div>
-						<Button>Ajouter</Button>
+						<Button>Sign-In</Button>
 					</div>
 				</form>
           	</SiteLayout>
