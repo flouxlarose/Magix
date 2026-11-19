@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import SiteLayout from '../layouts/site-layout';
 import Button from '../components/button';
+import { useNavigate } from 'react-router';
 
-export default function Index() {
-	const [ShowSuccessMessage, setShowSuccessMessage] = useState(false);	
+export default function Index() {	
 	const [ShowErrorMessage, setShowErrorMessage] = useState(false);
 	const [data, setData] = useState({
 		username : "",
 		password : "",
 	})
+	const navigate = useNavigate();
 
 	const handleSubmit = evt => {
 		evt.preventDefault();
@@ -25,11 +26,7 @@ export default function Index() {
 		.then(response => response.json())
 		.then(result => {
 			if (result == "OK") {
-				setShowSuccessMessage(true);
-				setData({
-					username : "",
-					password : "",
-				})				
+				navigate("/lobby");		
 			}
 			else if (result == "INVALID_USERNAME_PASSWORD"){
 				setShowErrorMessage(true);
@@ -43,14 +40,6 @@ export default function Index() {
 
   	return  <SiteLayout title="Sign in">
         		<h1>Connectez-vous</h1>
-				{
-					ShowSuccessMessage ?
-					<div className='bg-green-300 text-green-700 p-1 border my-2'> 
-						Vous êtes connecté !
-					</div>
-					:
-						null
-				}
 				{
 					ShowErrorMessage ?
 					<div className='bg-red-300 text-green-700 p-1 border my-2'> 
