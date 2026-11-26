@@ -40,8 +40,22 @@ export default function Lobby() {
         });
     };
 
-    const handlePractice = () => {
-        evt.preventDefault();
+    const handleGame = (type) => {
+
+
+        let formData = new FormData();
+		formData.append("gameType", type);
+        fetch("/api/joinGame.php", {
+            method:'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(result => {
+            if(result == "JOINED_TRAINING" || result == "JOINED_PVP"){
+                navigate("/game")
+            }
+        })
+
     }
 
     const applyStyles = ()=> {
@@ -119,7 +133,8 @@ export default function Lobby() {
                     <div>
                         <Button onClick={() => setShowDeck(true)}>Change Deck</Button>
                         <Button onClick={handleSignOut}>Sign Out</Button>
-                        <Button onClick={handlePractice}>Practice</Button>
+                        <Button onClick={() => handleGame("TRAINING")}>Practice</Button>
+                        <Button onClick={() => handleGame("PVP")}>PVP</Button>
                     </div>
                     <div
                         style={{
