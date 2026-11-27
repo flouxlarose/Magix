@@ -21,9 +21,7 @@ export default function Lobby() {
 
     const chatRef = useRef(null);
 
-    const handleSignOut = () => {
-        evt.preventDefault();
-        
+    const handleSignOut = () => {       
         fetch("/api/sign-out.php", {
             method: 'POST',
         })
@@ -41,8 +39,6 @@ export default function Lobby() {
     };
 
     const handleGame = (type) => {
-
-
         let formData = new FormData();
 		formData.append("gameType", type);
         fetch("/api/joinGame.php", {
